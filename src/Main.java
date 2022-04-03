@@ -131,7 +131,7 @@ public class Main {
 
                 // menghitung dan menampilkan waktu eksekusi program
                 long elapsedTime = stopTime - startTime;
-                System.out.printf("Waktu eksekusi program: %d ms%n", elapsedTime);
+                System.out.printf("Waktu eksekusi program = %d ms%n", elapsedTime);
 
                 // menampilkan jumlah simpul yang dibangkitkan
                 System.out.printf("Jumlah simpul yang dibangkitkan = %d%n", totalNode);
@@ -142,7 +142,7 @@ public class Main {
 
         } catch (FileNotFoundException FileNotFound) {
             System.out.println("\nFile tidak ditemukan!");
-            
+
         } catch (OutOfMemoryError OutOfMemory) {
             System.out.println("Nampaknya anda belum beruntung, silakan coba lagi :)");
         }
