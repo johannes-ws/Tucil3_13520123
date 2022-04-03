@@ -39,21 +39,21 @@ public class Main {
             }
             myReader.close();
 
-            // waktu dimulai
-            long startTime = System.currentTimeMillis();
-
             // menampilkan matriks posisi awal
             System.out.println();
             matrix.showMatrix();
-
+            
             // menampilkan nilai dari fungsi Kurang(i)
             System.out.println();
             matrix.showKurang();
-
+            
             // menampilkan nilai dari sigma Kurang(i) + X
             System.out.printf("Nilai dari sigma Kurang(i) + X = %d%n%n", matrix.sigmaKurang());
-
+            
             if (matrix.sigmaKurang() % 2 == 0) {
+                // waktu dimulai
+                long startTime = System.currentTimeMillis();
+    
                 FifteenPuzzle solution = new FifteenPuzzle("solution");
                 List<String> solutionPath = new ArrayList<>();
                 int totalNode = 0;
@@ -113,6 +113,9 @@ public class Main {
                     }
                 }
                 
+                // waktu berhenti
+                long stopTime = System.currentTimeMillis();
+    
                 // menampilkan urutan matriks dari posisi awal ke posisi akhir
                 int count = 0;
                 System.out.println("Posisi awal:");
@@ -126,22 +129,20 @@ public class Main {
                     System.out.println();
                 }
 
+                // menghitung dan menampilkan waktu eksekusi program
+                long elapsedTime = stopTime - startTime;
+                System.out.printf("Waktu eksekusi program: %d ms%n", elapsedTime);
+
                 // menampilkan jumlah simpul yang dibangkitkan
                 System.out.printf("Jumlah simpul yang dibangkitkan = %d%n", totalNode);
 
             } else {
-                System.out.println("Puzzle ini tidak dapat diselesaikan karena sigma Kurang(i) + X bernilai ganjil");
-            }
-
-            // waktu berhenti
-            long stopTime = System.currentTimeMillis();
-
-            // menghitung dan menampilkan waktu eksekusi program
-            long elapsedTime = stopTime - startTime;
-            System.out.printf("Waktu eksekusi program: %d ms%n", elapsedTime);
+                System.out.println("Puzzle ini tidak dapat diselesaikan!");
+            }    
 
         } catch (FileNotFoundException FileNotFound) {
-            System.out.println("File tidak ditemukan");
+            System.out.println("\nFile tidak ditemukan!");
+            
         } catch (OutOfMemoryError OutOfMemory) {
             System.out.println("Nampaknya anda belum beruntung, silakan coba lagi :)");
         }
