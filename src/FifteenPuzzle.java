@@ -5,50 +5,50 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
-public class BnB extends Object implements Comparable<BnB> {
-    private int[][] matrix1;
+public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
     private int row;
     private int col;
-    private List<Character> path;
+    private int[][] matrix;
+    private List<String> path;
 
-    public BnB() {
+    public FifteenPuzzle() {
         this.row = 4;
         this.col = 4;
-        this.matrix1 = new int[this.row][this.col];
+        this.matrix = new int[this.row][this.col];
         this.path = new ArrayList<>();
-        this.path.add('i');
+        this.path.add("START");
     }
 
-    public BnB(BnB bnb) {
+    public FifteenPuzzle(FifteenPuzzle bnb) {
         this.row = 4;
         this.col = 4;
-        this.matrix1 = new int[this.row][this.col];
+        this.matrix = new int[this.row][this.col];
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                this.matrix1[i][j] = bnb.matrix1[i][j];
+                this.matrix[i][j] = bnb.matrix[i][j];
             }
         }
         this.path = new ArrayList<>();
-        for (Character c : bnb.path) {
-            this.path.add(c);
+        for (String s : bnb.path) {
+            this.path.add(s);
         }
     }
 
-    public BnB(String solution) {
+    public FifteenPuzzle(String solution) {
         int a = 0;
         this.row = 4;
         this.col = 4;
-        this.matrix1 = new int[this.row][this.col];
+        this.matrix = new int[this.row][this.col];
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
                 a++;
-                this.matrix1[i][j] = a;
+                this.matrix[i][j] = a;
             }
         }
         this.path = new ArrayList<>();
     }
 
-    public int compareTo(BnB o) {
+    public int compareTo(FifteenPuzzle o) {
         if (this.COST() > o.COST()) {
             return 1;
         } else if (this.COST() == o.COST()) {
@@ -61,7 +61,7 @@ public class BnB extends Object implements Comparable<BnB> {
     public void show() {
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                System.out.print(this.matrix1[i][j] + " ");
+                System.out.print(this.matrix[i][j] + " ");
             }
             System.out.println();
         }
@@ -77,11 +77,11 @@ public class BnB extends Object implements Comparable<BnB> {
         }
     }
 
-    public boolean isSame(BnB bnb) {
+    public boolean isSame(FifteenPuzzle bnb) {
         boolean found = true;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                if (this.matrix1[i][j] != bnb.matrix1[i][j]) {
+                if (this.matrix[i][j] != bnb.matrix[i][j]) {
                     found = false;
                 }
                 if (!found) {
@@ -96,7 +96,7 @@ public class BnB extends Object implements Comparable<BnB> {
     }
 
     public void set(int x, int y, int a) {
-        this.matrix1[x][y] = a;
+        this.matrix[x][y] = a;
     }
 
     public int KURANG(int a) {
@@ -113,9 +113,9 @@ public class BnB extends Object implements Comparable<BnB> {
         int now = 0;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                if (this.matrix1[i][j] == a) {
+                if (this.matrix[i][j] == a) {
                     now = a;
-                } else if (this.matrix1[i][j] == b) {
+                } else if (this.matrix[i][j] == b) {
                     now = b;
                 }
             }
@@ -131,7 +131,7 @@ public class BnB extends Object implements Comparable<BnB> {
         int min = 0;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                min += this.KURANG(this.matrix1[i][j]);
+                min += this.KURANG(this.matrix[i][j]);
             }
         }
         if (this.KOSONG()) {
@@ -144,11 +144,11 @@ public class BnB extends Object implements Comparable<BnB> {
         boolean found = false;
         for (int i = 0; i < this.row; i++) {
             if (i % 2 == 0) {
-                if (this.matrix1[i][1] == 16 || this.matrix1[i][3] == 16) {
+                if (this.matrix[i][1] == 16 || this.matrix[i][3] == 16) {
                     found = true;
                 }
             } else {
-                if (this.matrix1[i][0] == 16 || this.matrix1[i][2] == 16) {
+                if (this.matrix[i][0] == 16 || this.matrix[i][2] == 16) {
                     found = true;
                 }
             }
@@ -161,7 +161,7 @@ public class BnB extends Object implements Comparable<BnB> {
         int count = 1;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                if (this.matrix1[i][j] != count) {
+                if (this.matrix[i][j] != count) {
                     min++;
                 }
                 count++;
@@ -176,15 +176,15 @@ public class BnB extends Object implements Comparable<BnB> {
     public boolean checkUP() {
         boolean found = true;
         for (int i = 0; i < this.row; i++) {
-            if (this.matrix1[0][i] == 16) {
+            if (this.matrix[0][i] == 16) {
                 found = false;
             }
         }
         return found;
     }
 
-    public boolean isUP(BnB bnb) {
-        BnB tes = new BnB(bnb);
+    public boolean isUP(FifteenPuzzle bnb) {
+        FifteenPuzzle tes = new FifteenPuzzle(bnb);
         tes.UP();
         return this.isSame(tes);
     }
@@ -194,9 +194,9 @@ public class BnB extends Object implements Comparable<BnB> {
             boolean found = false;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    if (this.matrix1[i][j] == 16) {
-                        this.matrix1[i][j] = this.matrix1[i-1][j];
-                        this.matrix1[i-1][j] = 16;
+                    if (this.matrix[i][j] == 16) {
+                        this.matrix[i][j] = this.matrix[i-1][j];
+                        this.matrix[i-1][j] = 16;
                         found = true;
                     }
                     if (found) {
@@ -213,15 +213,15 @@ public class BnB extends Object implements Comparable<BnB> {
     public boolean checkDOWN() {
         boolean found = true;
         for (int i = 0; i < this.row; i++) {
-            if (this.matrix1[3][i] == 16) {
+            if (this.matrix[3][i] == 16) {
                 found = false;
             }
         }
         return found;
     }
 
-    public boolean isDOWN(BnB bnb) {
-        BnB tes = new BnB(bnb);
+    public boolean isDOWN(FifteenPuzzle bnb) {
+        FifteenPuzzle tes = new FifteenPuzzle(bnb);
         tes.DOWN();
         return this.isSame(tes);
     }
@@ -231,9 +231,9 @@ public class BnB extends Object implements Comparable<BnB> {
             boolean found = false;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    if (this.matrix1[i][j] == 16) {
-                        this.matrix1[i][j] = this.matrix1[i+1][j];
-                        this.matrix1[i+1][j] = 16;
+                    if (this.matrix[i][j] == 16) {
+                        this.matrix[i][j] = this.matrix[i+1][j];
+                        this.matrix[i+1][j] = 16;
                         found = true;
                     }
                     if (found) {
@@ -250,15 +250,15 @@ public class BnB extends Object implements Comparable<BnB> {
     public boolean checkLEFT() {
         boolean found = true;
         for (int i = 0; i < this.row; i++) {
-            if (this.matrix1[i][0] == 16) {
+            if (this.matrix[i][0] == 16) {
                 found = false;
             }
         }
         return found;
     }
 
-    public boolean isLEFT(BnB bnb) {
-        BnB tes = new BnB(bnb);
+    public boolean isLEFT(FifteenPuzzle bnb) {
+        FifteenPuzzle tes = new FifteenPuzzle(bnb);
         tes.LEFT();
         return this.isSame(tes);
     }
@@ -268,9 +268,9 @@ public class BnB extends Object implements Comparable<BnB> {
             boolean found = false;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    if (this.matrix1[i][j] == 16) {
-                        this.matrix1[i][j] = this.matrix1[i][j-1];
-                        this.matrix1[i][j-1] = 16;
+                    if (this.matrix[i][j] == 16) {
+                        this.matrix[i][j] = this.matrix[i][j-1];
+                        this.matrix[i][j-1] = 16;
                         found = true;
                     }
                     if (found) {
@@ -287,15 +287,15 @@ public class BnB extends Object implements Comparable<BnB> {
     public boolean checkRIGHT() {
         boolean found = true;
         for (int i = 0; i < this.row; i++) {
-            if (this.matrix1[i][3] == 16) {
+            if (this.matrix[i][3] == 16) {
                 found = false;
             }
         }
         return found;
     }
 
-    public boolean isRIGHT(BnB bnb) {
-        BnB tes = new BnB(bnb);
+    public boolean isRIGHT(FifteenPuzzle bnb) {
+        FifteenPuzzle tes = new FifteenPuzzle(bnb);
         tes.RIGHT();
         return this.isSame(tes);
     }
@@ -305,9 +305,9 @@ public class BnB extends Object implements Comparable<BnB> {
             boolean found = false;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    if (this.matrix1[i][j] == 16) {
-                        this.matrix1[i][j] = this.matrix1[i][j+1];
-                        this.matrix1[i][j+1] = 16;
+                    if (this.matrix[i][j] == 16) {
+                        this.matrix[i][j] = this.matrix[i][j+1];
+                        this.matrix[i][j+1] = 16;
                         found = true;
                     }
                     if (found) {
@@ -321,7 +321,7 @@ public class BnB extends Object implements Comparable<BnB> {
         }
     }
 
-    public void addToPath(List<Character> l, BnB bnb) {
+    public void addToPath(List<Character> l, FifteenPuzzle bnb) {
         if (isUP(bnb)) {
             l.add('u');
         } else if (isDOWN(bnb)) {
@@ -334,7 +334,7 @@ public class BnB extends Object implements Comparable<BnB> {
     }
 
     public static void main(String[] args) {
-		BnB matrix1 = new BnB();
+		FifteenPuzzle matrix1 = new FifteenPuzzle();
         int x = 0;
         int y = 0;
         try {
@@ -361,46 +361,46 @@ public class BnB extends Object implements Comparable<BnB> {
             System.out.println(matrix1.TOTALKURANG());
             if (matrix1.TOTALKURANG() % 2 == 0) {
                 System.out.println("bisa diselesaikan");
-                BnB solve = new BnB("solve");
+                FifteenPuzzle solve = new FifteenPuzzle("solve");
                 int bangkit = 0;
                 List<Character> l = new ArrayList<>();
-                PriorityQueue<BnB> pq = new PriorityQueue<>();
+                PriorityQueue<FifteenPuzzle> pq = new PriorityQueue<>();
                 pq.add(matrix1);
-                BnB now = new BnB();
-                BnB cek = new BnB();
+                FifteenPuzzle now = new FifteenPuzzle();
+                FifteenPuzzle cek = new FifteenPuzzle();
                 while (!pq.isEmpty()) {
-                    now = new BnB(cek);
-                    cek = new BnB(pq.poll());
+                    now = new FifteenPuzzle(cek);
+                    cek = new FifteenPuzzle(pq.poll());
                     cek.addToPath(l, now);
                     if (cek.isSame(solve)) {
                         System.out.println(" ketemu");
                         System.out.println(cek.path);
                         break;
                     }
-                    if (cek.checkUP() && cek.path.get(cek.path.size()-1) != 'd') {
-                        BnB up = new BnB(cek);
-                        up.path.add('u');
+                    if (cek.checkUP() && cek.path.get(cek.path.size()-1) != "DOWN") {
+                        FifteenPuzzle up = new FifteenPuzzle(cek);
+                        up.path.add("UP");
                         up.UP();
                         pq.add(up);
                         bangkit++;
                     }
-                    if (cek.checkRIGHT() && cek.path.get(cek.path.size()-1) != 'l') {
-                        BnB right = new BnB(cek);
-                        right.path.add('r');
+                    if (cek.checkRIGHT() && cek.path.get(cek.path.size()-1) != "LEFT") {
+                        FifteenPuzzle right = new FifteenPuzzle(cek);
+                        right.path.add("RIGHT");
                         right.RIGHT();
                         pq.add(right);
                         bangkit++;
                     }
-                    if (cek.checkDOWN() && cek.path.get(cek.path.size()-1) != 'u') {
-                        BnB down = new BnB(cek);
-                        down.path.add('d');
+                    if (cek.checkDOWN() && cek.path.get(cek.path.size()-1) != "UP") {
+                        FifteenPuzzle down = new FifteenPuzzle(cek);
+                        down.path.add("DOWN");
                         down.DOWN();
                         pq.add(down);
                         bangkit++;
                     }
-                    if (cek.checkLEFT() && cek.path.get(cek.path.size()-1) != 'r') {
-                        BnB left = new BnB(cek);
-                        left.path.add('l');
+                    if (cek.checkLEFT() && cek.path.get(cek.path.size()-1) != "RIGHT") {
+                        FifteenPuzzle left = new FifteenPuzzle(cek);
+                        left.path.add("LEFT");
                         left.LEFT();
                         pq.add(left);
                         bangkit++;
