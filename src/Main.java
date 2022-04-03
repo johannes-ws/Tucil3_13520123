@@ -7,93 +7,133 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-		FifteenPuzzle matrix1 = new FifteenPuzzle();
-        int x = 0;
-        int y = 0;
+		FifteenPuzzle matrix = new FifteenPuzzle();
+        int row = 0;
+        int col = 0;
+
         try {
+            // input file
             System.out.print("Masukkan nama file: ");
-            Scanner myFile = new Scanner(System.in);
-            String file = myFile.nextLine();
-            File myObj = new File("test/" + file);
-            myFile.close();
-            Scanner myReader = new Scanner(myObj);
+            Scanner scanFile = new Scanner(System.in);
+            String file = scanFile.nextLine();
+            scanFile.close();
+
+            // baca file
+            File myFile = new File("test/" + file);
+            Scanner myReader = new Scanner(myFile);
             while (myReader.hasNextInt()) {
                 int data = myReader.nextInt();
-                matrix1.setElement(x, y, data);
-                y++;
-                if (y == 4) {
-                    x++;
-                    y = 0;
+                matrix.setElement(row, col, data);
+                col++;
+                if (col == 4) {
+                    row += 1;
+                    col = 0;
                 }
             }
             myReader.close();
+
+            // waktu dimulai
             long startTime = System.currentTimeMillis();
 
-            matrix1.showMatrix();
-            matrix1.showKurang();
-            System.out.println(matrix1.sigmaKurang());
-            if (matrix1.sigmaKurang() % 2 == 0) {
-                System.out.println("bisa diselesaikan");
-                FifteenPuzzle solve = new FifteenPuzzle("solve");
-                int bangkit = 0;
-                List<String> l = new ArrayList<>();
+            // menampilkan matriks posisi awal
+            matrix.showMatrix();
+
+            // menampilkan nilai dari fungsi Kurang(i)
+            matrix.showKurang();
+
+            // menampilkan nilai dari sigma Kurang(i) + X
+            System.out.printf("Nilai dari sigma Kurang(i) + X = %d%n", matrix.sigmaKurang());
+
+            if (matrix.sigmaKurang() % 2 == 0) {
+                System.out.println("Puzzle ini dapat diselesaikan karena sigma Kurang(i) + X bernilai genap");
+
+                FifteenPuzzle solution = new FifteenPuzzle("solution");
+                List<String> solutionPath = new ArrayList<>();
+                int totalNode = 0;
+
+                // memasukkan matriks awal ke pq
                 PriorityQueue<FifteenPuzzle> pq = new PriorityQueue<>();
-                pq.add(matrix1);
+                pq.add(matrix);
+
+                FifteenPuzzle previous = new FifteenPuzzle();
                 FifteenPuzzle now = new FifteenPuzzle();
-                FifteenPuzzle cek = new FifteenPuzzle();
                 while (!pq.isEmpty()) {
-                    now = new FifteenPuzzle(cek);
-                    cek = new FifteenPuzzle(pq.poll());
-                    cek.addToPath(l, now);
-                    if (cek.isSame(solve)) {
-                        System.out.println(" ketemu");
-                        System.out.println(cek.getPath());
+                    previous = new FifteenPuzzle(now);
+                    now = new FifteenPuzzle(pq.poll());
+
+                    // menambahkan path untuk menuju matriks tersebut
+                    now.addToPath(solutionPath, previous);
+
+                    // jika sudah ketemu, looping akan berhenti
+                    if (now.isSame(solution)) {
                         break;
                     }
-                    if (cek.checkUP() && cek.getPath().get(cek.getPath().size()-1) != "DOWN") {
-                        FifteenPuzzle up = new FifteenPuzzle(cek);
-                        up.getPath().add("UP");
+
+                    // pembangkitan simpul untuk command UP
+                    if (now.checkUP() && now.getPath().get(now.getPath().size()-1) != "DOWN") {
+                        FifteenPuzzle up = new FifteenPuzzle(now);
                         up.UP();
+                        up.getPath().add("UP");
                         pq.add(up);
-                        bangkit++;
+                        totalNode += 1;
                     }
-                    if (cek.checkRIGHT() && cek.getPath().get(cek.getPath().size()-1) != "LEFT") {
-                        FifteenPuzzle right = new FifteenPuzzle(cek);
-                        right.getPath().add("RIGHT");
+
+                    // pembangkitan simpul untuk command RIGHT
+                    if (now.checkRIGHT() && now.getPath().get(now.getPath().size()-1) != "LEFT") {
+                        FifteenPuzzle right = new FifteenPuzzle(now);
                         right.RIGHT();
+                        right.getPath().add("RIGHT");
                         pq.add(right);
-                        bangkit++;
+                        totalNode += 1;
                     }
-                    if (cek.checkDOWN() && cek.getPath().get(cek.getPath().size()-1) != "UP") {
-                        FifteenPuzzle down = new FifteenPuzzle(cek);
-                        down.getPath().add("DOWN");
+
+                    // pembangkitan simpul untuk command DOWN
+                    if (now.checkDOWN() && now.getPath().get(now.getPath().size()-1) != "UP") {
+                        FifteenPuzzle down = new FifteenPuzzle(now);
                         down.DOWN();
+                        down.getPath().add("DOWN");
                         pq.add(down);
-                        bangkit++;
+                        totalNode += 1;
                     }
-                    if (cek.checkLEFT() && cek.getPath().get(cek.getPath().size()-1) != "RIGHT") {
-                        FifteenPuzzle left = new FifteenPuzzle(cek);
-                        left.getPath().add("LEFT");
+
+                    // pembangkitan simpul untuk command LEFT
+                    if (now.checkLEFT() && now.getPath().get(now.getPath().size()-1) != "RIGHT") {
+                        FifteenPuzzle left = new FifteenPuzzle(now);
                         left.LEFT();
+                        left.getPath().add("LEFT");
                         pq.add(left);
-                        bangkit++;
+                        totalNode += 1;
                     }
                 }
-                System.out.println(bangkit);
-                for (String lol : l) {
-                    System.out.print(lol);
+                
+                // menampilkan urutan matriks dari posisi awal ke posisi akhir
+                int count = 0;
+                matrix.showMatrix();
+                for (String command : solutionPath) {
+                    count++;
+                    System.out.printf("Langkah ke-%d: %s%n", count, command);
+                    matrix.todo(command);
+                    matrix.showMatrix();
                 }
+
+                // menampilkan jumlah simpul yang dibangkitkan
+                System.out.printf("Jumlah simpul yang dibangkitkan = %d%n", totalNode);
+
             } else {
-                System.out.println("tidak bisa diselesaikan");
+                System.out.println("Puzzle ini tidak dapat diselesaikan karena sigma Kurang(i) + X bernilai ganjil");
             }
 
+            // waktu berhenti
             long stopTime = System.currentTimeMillis();
+
+            // menghitung dan menampilkan waktu eksekusi program
             long elapsedTime = stopTime - startTime;
-            System.out.println(elapsedTime);
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.printf("Waktu eksekusi program: %d ms%n", elapsedTime);
+
+        } catch (FileNotFoundException FileNotFound) {
+            System.out.println("File tidak ditemukan");
+        } catch (OutOfMemoryError OutOfMemory) {
+            System.out.println("Nampaknya anda belum beruntung, silakan coba lagi :)");
         }
-
-
     }
 }

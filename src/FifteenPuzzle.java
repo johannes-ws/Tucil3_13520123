@@ -369,4 +369,17 @@ public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
         }        
         System.out.println("+----+-----------+");
     }
+
+    // melaksanakan perintah sesuai command
+    public void todo(String command) {
+        if (command.equals("UP")) {
+            this.UP();
+        } else if (command.equals("RIGHT")) {
+            this.RIGHT();
+        } else if (command.equals("DOWN")) {
+            this.DOWN();
+        } else if (command.equals("LEFT")) {
+            this.LEFT();
+        }
+    }
 }
