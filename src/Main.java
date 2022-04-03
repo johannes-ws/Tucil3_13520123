@@ -7,13 +7,20 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println(" __ _____       _____  _    _ _____________      ______    _____  ____  _ __      ________ _____       ");
+        System.out.println("/_ | ____|     |  __ \\| |  | |___  /___  / |    |  ____|  / ____|/ __ \\| |\\ \\    / /  ____|  __ \\ ");
+        System.out.println(" | | |__ ______| |__) | |  | |  / /   / /| |    | |__    | (___ | |  | | | \\ \\  / /| |__  | |__) |   ");
+        System.out.println(" | |___ \\______|  ___/| |  | | / /   / / | |    |  __|    \\___ \\| |  | | |  \\ \\/ / |  __| |  _  / ");
+        System.out.println(" | |___) |     | |    | |__| |/ /__ / /__| |____| |____   ____) | |__| | |___\\  /  | |____| | \\ \\   ");
+        System.out.println(" |_|____/      |_|     \\____//_____/_____|______|______| |_____/ \\____/|______\\/   |______|_|  \\_\\");
+
 		FifteenPuzzle matrix = new FifteenPuzzle();
         int row = 0;
         int col = 0;
 
         try {
             // input file
-            System.out.print("Masukkan nama file: ");
+            System.out.print("\nMasukkan nama file: ");
             Scanner scanFile = new Scanner(System.in);
             String file = scanFile.nextLine();
             scanFile.close();
@@ -36,17 +43,17 @@ public class Main {
             long startTime = System.currentTimeMillis();
 
             // menampilkan matriks posisi awal
+            System.out.println();
             matrix.showMatrix();
 
             // menampilkan nilai dari fungsi Kurang(i)
+            System.out.println();
             matrix.showKurang();
 
             // menampilkan nilai dari sigma Kurang(i) + X
-            System.out.printf("Nilai dari sigma Kurang(i) + X = %d%n", matrix.sigmaKurang());
+            System.out.printf("Nilai dari sigma Kurang(i) + X = %d%n%n", matrix.sigmaKurang());
 
             if (matrix.sigmaKurang() % 2 == 0) {
-                System.out.println("Puzzle ini dapat diselesaikan karena sigma Kurang(i) + X bernilai genap");
-
                 FifteenPuzzle solution = new FifteenPuzzle("solution");
                 List<String> solutionPath = new ArrayList<>();
                 int totalNode = 0;
@@ -108,12 +115,15 @@ public class Main {
                 
                 // menampilkan urutan matriks dari posisi awal ke posisi akhir
                 int count = 0;
+                System.out.println("Posisi awal:");
                 matrix.showMatrix();
+                System.out.println();
                 for (String command : solutionPath) {
                     count++;
                     System.out.printf("Langkah ke-%d: %s%n", count, command);
                     matrix.todo(command);
                     matrix.showMatrix();
+                    System.out.println();
                 }
 
                 // menampilkan jumlah simpul yang dibangkitkan
