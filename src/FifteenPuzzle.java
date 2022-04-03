@@ -11,166 +11,193 @@ public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
     private int[][] matrix;
     private List<String> path;
 
+    // default constructor
     public FifteenPuzzle() {
         this.row = 4;
         this.col = 4;
         this.matrix = new int[this.row][this.col];
         this.path = new ArrayList<>();
         this.path.add("START");
-    }
-
-    public FifteenPuzzle(FifteenPuzzle bnb) {
-        this.row = 4;
-        this.col = 4;
-        this.matrix = new int[this.row][this.col];
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col; j++) {
-                this.matrix[i][j] = bnb.matrix[i][j];
-            }
-        }
-        this.path = new ArrayList<>();
-        for (String s : bnb.path) {
-            this.path.add(s);
-        }
-    }
-
+    }    
+    
+    // solution constructor
     public FifteenPuzzle(String solution) {
-        int a = 0;
+        int number = 0;
         this.row = 4;
         this.col = 4;
         this.matrix = new int[this.row][this.col];
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                a++;
-                this.matrix[i][j] = a;
+                number++;
+                this.matrix[i][j] = number;
             }
         }
         this.path = new ArrayList<>();
     }
 
-    public int compareTo(FifteenPuzzle o) {
-        if (this.COST() > o.COST()) {
+    // copy constructor
+    public FifteenPuzzle(FifteenPuzzle fifteen_puzzle) {
+        this.row = 4;
+        this.col = 4;
+        this.matrix = new int[this.row][this.col];
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col; j++) {
+                this.matrix[i][j] = fifteen_puzzle.matrix[i][j];
+            }    
+        }    
+        this.path = new ArrayList<>();
+        for (String string : fifteen_puzzle.path) {
+            this.path.add(string);
+        }    
+    }    
+
+    // menentukan PriorityQueue berdasarkan nilai cost suatu matriks
+    public int compareTo(FifteenPuzzle fifteen_puzzle) {
+        if (this.cost() > fifteen_puzzle.cost()) {
             return 1;
-        } else if (this.COST() == o.COST()) {
+        } else if (this.cost() == fifteen_puzzle.cost()) {
             return 0;
         } else {
             return -1;
         }
     }
 
-    public void show() {
+    // menampilkan suatu matriks ke layar
+    public void showMatrix() {
+        System.out.println("+----+----+----+----+");
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                System.out.print(this.matrix[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public void showKURANG() {
-        int a = 0;
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col; j++) {
-                a++;
-                System.out.printf("kurang(%d) = %d%n", a, this.KURANG(a));
-            }
-        }
-    }
-
-    public boolean isSame(FifteenPuzzle bnb) {
-        boolean found = true;
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.col; j++) {
-                if (this.matrix[i][j] != bnb.matrix[i][j]) {
-                    found = false;
-                }
-                if (!found) {
-                    break;
+                if (this.matrix[i][j] >= 1 && this.matrix[i][j] <= 9) {
+                    System.out.printf("|  %d ", this.matrix[i][j]);
+                } else if (this.matrix[i][j] >= 10 && this.matrix[i][j] <= 15) {
+                    System.out.printf("| %d ", this.matrix[i][j]);
+                } else {
+                    System.out.print("|    ");
                 }
             }
-            if (!found) {
-                break;
-            }
+            System.out.println("|");
+            System.out.println("+----+----+----+----+");
         }
-        return found;
     }
 
-    public void set(int x, int y, int a) {
-        this.matrix[x][y] = a;
-    }
-
-    public int KURANG(int a) {
-        int min = 0;
-        for (int i = 1; i < a; i++) {
-            if (this.POSISI(a, i)) {
-                min++;
-            }
-        }
-        return min;
-    }
-
-    public boolean POSISI(int a, int b) {
-        int now = 0;
+    // menampilkan nilai dari fungsi Kurang(i)
+    public void showKurang() {
+        System.out.println("+----+-----------+");
+        System.out.println("|  i | Kurang(i) |");
+        System.out.println("+----+-----------+");
+        int number = 0;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                if (this.matrix[i][j] == a) {
-                    now = a;
-                } else if (this.matrix[i][j] == b) {
-                    now = b;
+                number++;
+                if (number >= 1 && number <= 9 && this.kurang(number) >= 0 && this.kurang(number) <= 9) {
+                    System.out.printf("|  %d |     %d     |%n", number, this.kurang(number));
+                } else if (number >= 1 && number <= 9 && this.kurang(number) >= 10) {
+                    System.out.printf("|  %d |    %d     |%n", number, this.kurang(number));
+                } else if (number >= 10 && this.kurang(number) >= 0 && this.kurang(number) <= 9) {
+                    System.out.printf("| %d |     %d     |%n", number, this.kurang(number));
+                } else {
+                    System.out.printf("| %d |    %d     |%n", number, this.kurang(number));
                 }
             }
         }
-        if (now == b) {
+        System.out.println("+----+-----------+");
+    }
+
+    // mengecek kesamaan antara dua buah matriks
+    public boolean isSame(FifteenPuzzle fifteen_puzzle) {
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col; j++) {
+                if (this.matrix[i][j] != fifteen_puzzle.matrix[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // mengubah nilai elemen suatu matriks
+    public void setElement(int row, int col, int number) {
+        this.matrix[row][col] = number;
+    }
+
+    // menghitung banyaknya number > i dan posisi(number) < posisi(i)
+    public int kurang(int number) {
+        int count = 0;
+        for (int i = 1; i < number; i++) {
+            if (this.posisi(number, i)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // menentukan posisi dua buah angka, true jika posisi(big) < posisi(small)
+    public boolean posisi(int big, int small) {
+        int decision = 0;
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.col; j++) {
+                if (this.matrix[i][j] == big) {
+                    decision = big;
+                } else if (this.matrix[i][j] == small) {
+                    decision = small;
+                }
+            }
+        }
+        if (decision == small) {
             return true;
         } else {
             return false;
         }
     }
 
-    public int TOTALKURANG() {
-        int min = 0;
+    // menghitung nilai sigma Kurang(i) + X
+    public int sigmaKurang() {
+        int sigma = 0;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                min += this.KURANG(this.matrix[i][j]);
+                sigma += this.kurang(this.matrix[i][j]);
             }
         }
-        if (this.KOSONG()) {
-            min++;
+        if (this.isKosong()) {
+            sigma += 1;
         }
-        return min;
+        return sigma;
     }
 
-    public boolean KOSONG() {
-        boolean found = false;
+    // menentukan apakah posisi kosong berada pada arsiran
+    public boolean isKosong() {
         for (int i = 0; i < this.row; i++) {
             if (i % 2 == 0) {
                 if (this.matrix[i][1] == 16 || this.matrix[i][3] == 16) {
-                    found = true;
+                    return true;
                 }
             } else {
                 if (this.matrix[i][0] == 16 || this.matrix[i][2] == 16) {
-                    found = true;
+                    return true;
                 }
             }
         }
-        return found;
+        return false;
     }
 
-    public int COST() {
-        int min = 0;
-        int count = 1;
+    // menghitung nilai cost suatu matriks
+    public int cost() {
+        int number = 0;
+        int f = 1;
+        int g = 0;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.col; j++) {
-                if (this.matrix[i][j] != count) {
-                    min++;
-                }
-                count++;
-                if (count == 16) {
+                number++;
+                if (number == 16) {
                     break;
+                }
+                if (this.matrix[i][j] != number) {
+                    g += 1;
                 }
             }
         }
-        return min + 1;
+        int c = f + g;
+        return c;
     }
 
     public boolean checkUP() {
@@ -346,7 +373,7 @@ public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextInt()) {
                 int data = myReader.nextInt();
-                matrix1.set(x, y, data);
+                matrix1.setElement(x, y, data);
                 y++;
                 if (y == 4) {
                     x++;
@@ -356,10 +383,10 @@ public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
             myReader.close();
             long startTime = System.currentTimeMillis();
 
-            matrix1.show();
-            matrix1.showKURANG();
-            System.out.println(matrix1.TOTALKURANG());
-            if (matrix1.TOTALKURANG() % 2 == 0) {
+            matrix1.showMatrix();
+            matrix1.showKurang();
+            System.out.println(matrix1.sigmaKurang());
+            if (matrix1.sigmaKurang() % 2 == 0) {
                 System.out.println("bisa diselesaikan");
                 FifteenPuzzle solve = new FifteenPuzzle("solve");
                 int bangkit = 0;
