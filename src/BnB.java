@@ -9,11 +9,14 @@ public class BnB extends Object implements Comparable<BnB> {
     private int[][] matrix1;
     private int row;
     private int col;
+    private List<Character> path;
 
     public BnB() {
         this.row = 4;
         this.col = 4;
         this.matrix1 = new int[this.row][this.col];
+        this.path = new ArrayList<>();
+        this.path.add('i');
     }
 
     public BnB(BnB bnb) {
@@ -24,6 +27,10 @@ public class BnB extends Object implements Comparable<BnB> {
             for (int j = 0; j < this.col; j++) {
                 this.matrix1[i][j] = bnb.matrix1[i][j];
             }
+        }
+        this.path = new ArrayList<>();
+        for (Character c : bnb.path) {
+            this.path.add(c);
         }
     }
 
@@ -38,6 +45,7 @@ public class BnB extends Object implements Comparable<BnB> {
                 this.matrix1[i][j] = a;
             }
         }
+        this.path = new ArrayList<>();
     }
 
     public int compareTo(BnB o) {
@@ -176,25 +184,28 @@ public class BnB extends Object implements Comparable<BnB> {
     }
 
     public boolean isUP(BnB bnb) {
-        bnb.UP();
-        return this.isSame(bnb);
+        BnB tes = new BnB(bnb);
+        tes.UP();
+        return this.isSame(tes);
     }
 
     public void UP() {
-        boolean found = false;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (this.matrix1[i][j] == 16) {
-                    this.matrix1[i][j] = this.matrix1[i-1][j];
-                    this.matrix1[i-1][j] = 16;
-                    found = true;
+        if (this.checkUP()) {
+            boolean found = false;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (this.matrix1[i][j] == 16) {
+                        this.matrix1[i][j] = this.matrix1[i-1][j];
+                        this.matrix1[i-1][j] = 16;
+                        found = true;
+                    }
+                    if (found) {
+                        break;
+                    }
                 }
                 if (found) {
                     break;
                 }
-            }
-            if (found) {
-                break;
             }
         }
     }
@@ -210,25 +221,28 @@ public class BnB extends Object implements Comparable<BnB> {
     }
 
     public boolean isDOWN(BnB bnb) {
-        bnb.DOWN();
-        return this.isSame(bnb);
+        BnB tes = new BnB(bnb);
+        tes.DOWN();
+        return this.isSame(tes);
     }
 
     public void DOWN() {
-        boolean found = false;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (this.matrix1[i][j] == 16) {
-                    this.matrix1[i][j] = this.matrix1[i+1][j];
-                    this.matrix1[i+1][j] = 16;
-                    found = true;
+        if (this.checkDOWN()) {
+            boolean found = false;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (this.matrix1[i][j] == 16) {
+                        this.matrix1[i][j] = this.matrix1[i+1][j];
+                        this.matrix1[i+1][j] = 16;
+                        found = true;
+                    }
+                    if (found) {
+                        break;
+                    }
                 }
                 if (found) {
                     break;
                 }
-            }
-            if (found) {
-                break;
             }
         }
     }
@@ -244,25 +258,28 @@ public class BnB extends Object implements Comparable<BnB> {
     }
 
     public boolean isLEFT(BnB bnb) {
-        bnb.LEFT();
-        return this.isSame(bnb);
+        BnB tes = new BnB(bnb);
+        tes.LEFT();
+        return this.isSame(tes);
     }
 
     public void LEFT() {
-        boolean found = false;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (this.matrix1[i][j] == 16) {
-                    this.matrix1[i][j] = this.matrix1[i][j-1];
-                    this.matrix1[i][j-1] = 16;
-                    found = true;
+        if (this.checkLEFT()) {
+            boolean found = false;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (this.matrix1[i][j] == 16) {
+                        this.matrix1[i][j] = this.matrix1[i][j-1];
+                        this.matrix1[i][j-1] = 16;
+                        found = true;
+                    }
+                    if (found) {
+                        break;
+                    }
                 }
                 if (found) {
                     break;
                 }
-            }
-            if (found) {
-                break;
             }
         }
     }
@@ -278,25 +295,28 @@ public class BnB extends Object implements Comparable<BnB> {
     }
 
     public boolean isRIGHT(BnB bnb) {
-        bnb.RIGHT();
-        return this.isSame(bnb);
+        BnB tes = new BnB(bnb);
+        tes.RIGHT();
+        return this.isSame(tes);
     }
 
     public void RIGHT() {
-        boolean found = false;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                if (this.matrix1[i][j] == 16) {
-                    this.matrix1[i][j] = this.matrix1[i][j+1];
-                    this.matrix1[i][j+1] = 16;
-                    found = true;
+        if (this.checkRIGHT()) {
+            boolean found = false;
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (this.matrix1[i][j] == 16) {
+                        this.matrix1[i][j] = this.matrix1[i][j+1];
+                        this.matrix1[i][j+1] = 16;
+                        found = true;
+                    }
+                    if (found) {
+                        break;
+                    }
                 }
                 if (found) {
                     break;
                 }
-            }
-            if (found) {
-                break;
             }
         }
     }
@@ -354,35 +374,36 @@ public class BnB extends Object implements Comparable<BnB> {
                     cek.addToPath(l, now);
                     if (cek.isSame(solve)) {
                         System.out.println(" ketemu");
+                        System.out.println(cek.path);
                         break;
                     }
-                    if (cek.checkUP()) {
+                    if (cek.checkUP() && cek.path.get(cek.path.size()-1) != 'd') {
                         BnB up = new BnB(cek);
+                        up.path.add('u');
                         up.UP();
                         pq.add(up);
                         bangkit++;
-                        System.out.print("u");
                     }
-                    if (cek.checkRIGHT()) {
+                    if (cek.checkRIGHT() && cek.path.get(cek.path.size()-1) != 'l') {
                         BnB right = new BnB(cek);
+                        right.path.add('r');
                         right.RIGHT();
                         pq.add(right);
                         bangkit++;
-                        System.out.print("r");
                     }
-                    if (cek.checkDOWN()) {
+                    if (cek.checkDOWN() && cek.path.get(cek.path.size()-1) != 'u') {
                         BnB down = new BnB(cek);
+                        down.path.add('d');
                         down.DOWN();
                         pq.add(down);
                         bangkit++;
-                        System.out.print("d");
                     }
-                    if (cek.checkLEFT()) {
+                    if (cek.checkLEFT() && cek.path.get(cek.path.size()-1) != 'r') {
                         BnB left = new BnB(cek);
+                        left.path.add('l');
                         left.LEFT();
                         pq.add(left);
                         bangkit++;
-                        System.out.print("l");
                     }
                 }
                 System.out.println(bangkit);
