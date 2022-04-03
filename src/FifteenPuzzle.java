@@ -1,9 +1,5 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Scanner;
 
 public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
     private int row;
@@ -103,6 +99,11 @@ public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
         System.out.println("+----+-----------+");
     }
 
+    // mendapatkan path untuk menuju suatu matriks
+    public List<String> getPath() {
+        return this.path;
+    }
+
     // mengecek kesamaan antara dua buah matriks
     public boolean isSame(FifteenPuzzle fifteen_puzzle) {
         for (int i = 0; i < this.row; i++) {
@@ -200,254 +201,172 @@ public class FifteenPuzzle implements Comparable<FifteenPuzzle> {
         return c;
     }
 
+    // mengecek apakah bisa melakukan UP
     public boolean checkUP() {
-        boolean found = true;
-        for (int i = 0; i < this.row; i++) {
+        for (int i = 0; i < this.col; i++) {
             if (this.matrix[0][i] == 16) {
-                found = false;
+                return false;
             }
         }
-        return found;
+        return true;
     }
 
-    public boolean isUP(FifteenPuzzle bnb) {
-        FifteenPuzzle tes = new FifteenPuzzle(bnb);
-        tes.UP();
-        return this.isSame(tes);
+    // mengecek apakah this.matrix merupakan UP dari fifteen_puzzle.matrix
+    public boolean isUP(FifteenPuzzle fifteen_puzzle) {
+        FifteenPuzzle check = new FifteenPuzzle(fifteen_puzzle);
+        check.UP();
+        return this.isSame(check);
     }
 
+    // melakukan UP pada this.matrix
     public void UP() {
         if (this.checkUP()) {
-            boolean found = false;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            boolean flag = false;
+            for (int i = 0; i < this.row; i++) {
+                for (int j = 0; j < this.col; j++) {
                     if (this.matrix[i][j] == 16) {
                         this.matrix[i][j] = this.matrix[i-1][j];
                         this.matrix[i-1][j] = 16;
-                        found = true;
+                        flag = true;
                     }
-                    if (found) {
+                    if (flag) {
                         break;
                     }
                 }
-                if (found) {
+                if (flag) {
                     break;
                 }
             }
         }
     }
 
+    // mengecek apakah bisa melakukan DOWN
     public boolean checkDOWN() {
-        boolean found = true;
-        for (int i = 0; i < this.row; i++) {
+        for (int i = 0; i < this.col; i++) {
             if (this.matrix[3][i] == 16) {
-                found = false;
+                return false;
             }
         }
-        return found;
+        return true;
     }
 
-    public boolean isDOWN(FifteenPuzzle bnb) {
-        FifteenPuzzle tes = new FifteenPuzzle(bnb);
-        tes.DOWN();
-        return this.isSame(tes);
+    // mengecek apakah this.matrix merupakan DOWN dari fifteen_puzzle.matrix
+    public boolean isDOWN(FifteenPuzzle fifteen_puzzle) {
+        FifteenPuzzle check = new FifteenPuzzle(fifteen_puzzle);
+        check.DOWN();
+        return this.isSame(check);
     }
 
+    // melakukan DOWN pada this.matrix
     public void DOWN() {
         if (this.checkDOWN()) {
-            boolean found = false;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            boolean flag = false;
+            for (int i = 0; i < this.row; i++) {
+                for (int j = 0; j < this.col; j++) {
                     if (this.matrix[i][j] == 16) {
                         this.matrix[i][j] = this.matrix[i+1][j];
                         this.matrix[i+1][j] = 16;
-                        found = true;
+                        flag = true;
                     }
-                    if (found) {
+                    if (flag) {
                         break;
                     }
                 }
-                if (found) {
+                if (flag) {
                     break;
                 }
             }
         }
     }
 
+    // mengecek apakah bisa melakukan LEFT
     public boolean checkLEFT() {
-        boolean found = true;
         for (int i = 0; i < this.row; i++) {
             if (this.matrix[i][0] == 16) {
-                found = false;
+                return false;
             }
         }
-        return found;
+        return true;
     }
 
-    public boolean isLEFT(FifteenPuzzle bnb) {
-        FifteenPuzzle tes = new FifteenPuzzle(bnb);
-        tes.LEFT();
-        return this.isSame(tes);
+    // mengecek apakah this.matrix merupakan LEFT dari fifteen_puzzle.matrix
+    public boolean isLEFT(FifteenPuzzle fifteen_puzzle) {
+        FifteenPuzzle check = new FifteenPuzzle(fifteen_puzzle);
+        check.LEFT();
+        return this.isSame(check);
     }
 
+    // melakukan LEFT pada this.matrix
     public void LEFT() {
         if (this.checkLEFT()) {
-            boolean found = false;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            boolean flag = false;
+            for (int i = 0; i < this.row; i++) {
+                for (int j = 0; j < this.col; j++) {
                     if (this.matrix[i][j] == 16) {
                         this.matrix[i][j] = this.matrix[i][j-1];
                         this.matrix[i][j-1] = 16;
-                        found = true;
+                        flag = true;
                     }
-                    if (found) {
+                    if (flag) {
                         break;
                     }
                 }
-                if (found) {
+                if (flag) {
                     break;
                 }
             }
         }
     }
 
+    // mengecek apakah bisa melakukan RIGHT
     public boolean checkRIGHT() {
-        boolean found = true;
         for (int i = 0; i < this.row; i++) {
             if (this.matrix[i][3] == 16) {
-                found = false;
+                return false;
             }
         }
-        return found;
+        return true;
     }
 
-    public boolean isRIGHT(FifteenPuzzle bnb) {
-        FifteenPuzzle tes = new FifteenPuzzle(bnb);
-        tes.RIGHT();
-        return this.isSame(tes);
+    // mengecek apakah this.matrix merupakan RIGHT dari fifteen_puzzle.matrix
+    public boolean isRIGHT(FifteenPuzzle fifteen_puzzle) {
+        FifteenPuzzle check = new FifteenPuzzle(fifteen_puzzle);
+        check.RIGHT();
+        return this.isSame(check);
     }
 
+    // melakukan RIGHT pada this.matrix
     public void RIGHT() {
         if (this.checkRIGHT()) {
-            boolean found = false;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+            boolean flag = false;
+            for (int i = 0; i < this.row; i++) {
+                for (int j = 0; j < this.col; j++) {
                     if (this.matrix[i][j] == 16) {
                         this.matrix[i][j] = this.matrix[i][j+1];
                         this.matrix[i][j+1] = 16;
-                        found = true;
+                        flag = true;
                     }
-                    if (found) {
+                    if (flag) {
                         break;
                     }
                 }
-                if (found) {
+                if (flag) {
                     break;
                 }
             }
         }
     }
 
-    public void addToPath(List<Character> l, FifteenPuzzle bnb) {
-        if (isUP(bnb)) {
-            l.add('u');
-        } else if (isDOWN(bnb)) {
-            l.add('d');
-        } else if (isLEFT(bnb)) {
-            l.add('l');
-        } else if (isRIGHT(bnb)) {
-            l.add('r');
+    // menambahkan path untuk menuju suatu matriks
+    public void addToPath(List<String> list, FifteenPuzzle fifteen_puzzle) {
+        if (this.isUP(fifteen_puzzle)) {
+            list.add("UP");
+        } else if (this.isDOWN(fifteen_puzzle)) {
+            list.add("DOWN");
+        } else if (this.isLEFT(fifteen_puzzle)) {
+            list.add("LEFT");
+        } else if (this.isRIGHT(fifteen_puzzle)) {
+            list.add("RIGHT");
         }
-    }
-
-    public static void main(String[] args) {
-		FifteenPuzzle matrix1 = new FifteenPuzzle();
-        int x = 0;
-        int y = 0;
-        try {
-            System.out.print("Masukkan nama file: ");
-            Scanner myFile = new Scanner(System.in);
-            String file = myFile.nextLine();
-            File myObj = new File("test/" + file);
-            myFile.close();
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextInt()) {
-                int data = myReader.nextInt();
-                matrix1.setElement(x, y, data);
-                y++;
-                if (y == 4) {
-                    x++;
-                    y = 0;
-                }
-            }
-            myReader.close();
-            long startTime = System.currentTimeMillis();
-
-            matrix1.showMatrix();
-            matrix1.showKurang();
-            System.out.println(matrix1.sigmaKurang());
-            if (matrix1.sigmaKurang() % 2 == 0) {
-                System.out.println("bisa diselesaikan");
-                FifteenPuzzle solve = new FifteenPuzzle("solve");
-                int bangkit = 0;
-                List<Character> l = new ArrayList<>();
-                PriorityQueue<FifteenPuzzle> pq = new PriorityQueue<>();
-                pq.add(matrix1);
-                FifteenPuzzle now = new FifteenPuzzle();
-                FifteenPuzzle cek = new FifteenPuzzle();
-                while (!pq.isEmpty()) {
-                    now = new FifteenPuzzle(cek);
-                    cek = new FifteenPuzzle(pq.poll());
-                    cek.addToPath(l, now);
-                    if (cek.isSame(solve)) {
-                        System.out.println(" ketemu");
-                        System.out.println(cek.path);
-                        break;
-                    }
-                    if (cek.checkUP() && cek.path.get(cek.path.size()-1) != "DOWN") {
-                        FifteenPuzzle up = new FifteenPuzzle(cek);
-                        up.path.add("UP");
-                        up.UP();
-                        pq.add(up);
-                        bangkit++;
-                    }
-                    if (cek.checkRIGHT() && cek.path.get(cek.path.size()-1) != "LEFT") {
-                        FifteenPuzzle right = new FifteenPuzzle(cek);
-                        right.path.add("RIGHT");
-                        right.RIGHT();
-                        pq.add(right);
-                        bangkit++;
-                    }
-                    if (cek.checkDOWN() && cek.path.get(cek.path.size()-1) != "UP") {
-                        FifteenPuzzle down = new FifteenPuzzle(cek);
-                        down.path.add("DOWN");
-                        down.DOWN();
-                        pq.add(down);
-                        bangkit++;
-                    }
-                    if (cek.checkLEFT() && cek.path.get(cek.path.size()-1) != "RIGHT") {
-                        FifteenPuzzle left = new FifteenPuzzle(cek);
-                        left.path.add("LEFT");
-                        left.LEFT();
-                        pq.add(left);
-                        bangkit++;
-                    }
-                }
-                System.out.println(bangkit);
-                for (Character lol : l) {
-                    System.out.print(lol);
-                }
-            } else {
-                System.out.println("tidak bisa diselesaikan");
-            }
-
-            long stopTime = System.currentTimeMillis();
-            long elapsedTime = stopTime - startTime;
-            System.out.println(elapsedTime);
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-        }
-
-
     }
 }
